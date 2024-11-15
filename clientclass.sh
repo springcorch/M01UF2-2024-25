@@ -16,7 +16,8 @@ then
 fi
 
 echo "3. ENVIO DE PREFIJOS"
-echo "FILE_NAME dragon.txt" | nc localhost $PORT
+FILE_NAME="dragon.txt"
+echo "FILE_NAME $FILE_NAME" | nc localhost $PORT
 DATA=`nc -l $PORT`
 
 if [ "$DATA" != "OK_FILE_NAME" ]
@@ -25,4 +26,7 @@ then
 	exit 2
 fi
 
-echo "El protocolo ha sido un exito!"
+echo "5. Enviando contenido"
+CONTENIDO=`cat client/$FILE_NAME`
+echo "$CONTENIDO" | nc localhost $PORT
+

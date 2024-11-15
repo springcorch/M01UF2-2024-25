@@ -27,3 +27,12 @@ fi
 
 echo "4. CHECK OK - Enviando OK_FILE_NAME"
 echo "OK_FILE_NAME" | nc localhost $PORT
+
+echo "6. Recibiendo el dragón y almacenándolo"
+DATA=`nc -l $PORT`
+
+echo $DATA > server/dragon.txt 
+
+
+
+
