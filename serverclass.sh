@@ -3,17 +3,18 @@ PORT="2022"
 
 echo "Servidor de Dragón Magia Abuelita Miedo 2022"
 echo "0. ESCUCHANDO"
-
-DATA=`nc -l $PORT`
-
-if [ "$DATA" != "DMAM" ]
+DATA=`nc -l $PORT` 
+HEADER=`echo "$DATA" | cut -d ' ' -f 1`
+IP=`echo "$DATA" | cut -d ' ' -f 2`
+echo "IP del CLIENTE - $IP"
+if [ "$HEADER" != "DMAM" ]
 then
 	echo "ERROR 1: Cabecera incorrecta"
-	echo "KO_HEADER" | nc localhost $PORT
+	echo "KO_HEADER" | nc $IP $PORT
 	exit 1
 fi
 echo "2. CHECK OK - Enviando OK_HEADER"
-echo "OK_HEADER" | nc localhost $PORT
+echo "OK_HEADER" | nc $IP $PORT
 
 
 
@@ -24,11 +25,11 @@ FILE_NAME=`echo "$DATA" | cut -d ' ' -f 2`
 if [ "$PREFIJO" != "FILE_NAME" ]
 then
 	echo "ERROR 2: Prefijo incorrecto"
-	echo "KO_FILE_NAME" | nc localhost $PORT
+	echo "KO_FILE_NAME" | nc $IP $PORT
 	exit 2
 fi
 echo "4. CHECK OK - Enviando OK_FILE_NAME"
-echo "OK_FILE_NAME" | nc localhost $PORT
+echo "OK_FILE_NAME" | nc $IP $PORT
 
 
 
@@ -39,7 +40,7 @@ DATA=`nc -l $PORT`
 if [ "$DATA" == "" ]
 then
 	echo "ERROR 3: No hay contenido/contenido vacío"
-	echo "KO_CONTENIDO" | nc localhost $PORT
+	echo "KO_CONTENIDO" | nc $IP $PORT
 	exit 3
 fi
 
