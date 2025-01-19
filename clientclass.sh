@@ -28,12 +28,12 @@ fi
 echo "HEADER enviado con éxito!"
 
 
-
 echo "3. ENVIO DE PREFIJOS"
 
 FILE_NAME="dragon.txt"
+MD5SUM_CLIENT=$(echo -n "$FILE_NAME" | md5sum | cut -d ' ' -f 1)
 
-echo "FILE_NAME $FILE_NAME" | nc $IP_SERVER $PORT
+echo "FILE_NAME $FILE_NAME $MD5SUM_CLIENT" | nc $IP_SERVER $PORT
 
 DATA=`nc -l $PORT`
 
@@ -45,9 +45,9 @@ fi
 echo "PREFIJO enviado con éxito!"
 
 
-echo "5. ENVIO DE CONTENIDO"
-CONTENIDO=`cat client/$FILE_NAME`
-echo "$CONTENIDO" | nc $IP_SERVER $PORT
+echo "8. ENVIO DE CONTENIDO"
+
+cat client/$FILE_NAME | nc $IP_SERVER $PORT
 
 DATA=`nc -l $PORT`
 
@@ -58,3 +58,18 @@ then
 fi
 echo "CONTENIDO enviado con éxito!"
 
+echo "11. ENVIO DE CONTENIDO CIFRADO MD5"
+MD5SUM=$(md5sum client/$FILE_NAME | cut -d ' ' -f 1)
+
+echo "FILE_MD5 $MD5SUM" | nc $IP_SERVER $PORT
+
+DATA=`nc -l $PORT`
+
+if [ "$DATA" != "OK_MD5SUM" ]
+then
+	echo "ERROR 4: El MD5 no coincide"
+	echo "KO_MD5SUM"
+	exit 4
+fi
+echo "MD5SUM enviado con éxito!"
+echo "Finalizacion"
